@@ -22,7 +22,6 @@ elevation==1.1.0
 entrypoints==0.3
 fasteners==0.16
 Fiona==1.8.18
-GDAL==2.4.0
 geopandas==0.9.0
 gunicorn==20.0.4
 idna==2.10
