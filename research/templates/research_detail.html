@@ -1,0 +1,73 @@
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+
+
+<style>
+
+.topnav {
+  overflow: hidden;
+  background-color: #f5f5f5;
+}
+
+.topnav a {
+  float: left;
+  color: grey;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+  font-size: 17px;
+}
+
+.topnav a:hover {
+  background-color: #ddd;
+  color: black;
+}
+
+.topnav a.active {
+  color: black;
+}
+
+</style>
+
+
+<div class="topnav">
+  <a href="{% url 'home' %}">Stephen Mulherin</a>
+  <a href="{% url 'home_page' %}">Projects</a>
+  <a href="{% url 'research_index' %}">Research</a>
+</div>
+
+
+<div class="col-md-8 offset-md-2">
+    <h1>{{ post.title }}</h1>
+    <small>
+        {{ post.created_on.date }} |&nbsp;
+    </small>
+    <p>{{ post.body | linebreaks }}</p>
+    <a href="{{ post.url }}">{{post.url}}</a>
+    <p> </p>
+    <p> </p>
+    <h3>Leave a comment:</h3>
+    <form action="/research/{{ post.pk }}/" method="post">
+        {% csrf_token %}
+        <div class="form-group">
+            {{ form.author }}
+        </div>
+        <div class="form-group">
+            {{ form.body }}
+        </div>
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+</div>
+
+<style>
+.footer{
+position: fixed;
+left: 0;
+bottom: 0;
+width: 100%;
+background-color: #f5f5f5;
+color: #333;
+text-align: center;
+}
+</style>
+
+

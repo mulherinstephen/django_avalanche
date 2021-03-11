@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<title>BITCHIN</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<script src='https://api.mapbox.com/mapbox-gl-js/v2.1.1/mapbox-gl.js'></script>
+<link href='https://api.mapbox.com/mapbox-gl-js/v2.1.1/mapbox-gl.css' rel='stylesheet'>
+<script src="https://npmcdn.com/@turf/turf@5.1.6/turf.min.js"></script>
+<script src="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-draw/v1.2.1/mapbox-gl-draw.js"></script>
+<link rel="stylesheet" href="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-draw/v1.2.1/mapbox-gl-draw.css" type="text/css">
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"> </script>
+<script src="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.5.1/mapbox-gl-geocoder.min.js"></script>
+<link rel="stylesheet" href="https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.5.1/mapbox-gl-geocoder.css" type="text/css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
+<link rel='icon' type='image/ping' href='https://assets.bwbx.io/s3/javelin/public/hub/images/favicon-black-63fe5249d3.png'>
+</head>
+<body>
+<style> 
+pre {
+    display: block;   
+    padding: 9.5px;
+    font-size: 13px;
+    line-height: 1.42857;
+    color: #333;
+    word-break: break-all;
+    word-wrap: break-word;
+    background-color: #f5f5f5;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+}
+
+.topnav {
+  overflow: hidden;
+  background-color: #f5f5f5;
+}
+
+.topnav a {
+  float: left;
+  color: grey;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+  font-size: 17px;
+}
+
+.topnav a:hover {
+  background-color: #ddd;
+  color: black;
+}
+
+.topnav a.active {
+  color: black;
+}
+
+</style>
+
+
+<div class="topnav">
+  <a href="{% url 'home' %}">Stephen Mulherin</a>
+  <a href="{% url 'home_page' %}">Projects</a>
+  <a href="{% url 'research_index' %}">Research</a>
+</div>
+
+
+
+<!-- Sidebar -->
+<div class="w3-sidebar w3-white w3-bar-block" style="width:15%">
+  <h2 class="w3-bar-item">Projects:</h2>
+  <a href="#myid2" class="w3-bar-item w3-button"><pre>Corn Calculator</pre></a>
+  <a href="#myid1" class="w3-bar-item w3-button"><pre>Map My Ski Tour</pre></a>
+</div>
+
+<body>
+
+
+<!-- Page Content -->
+<div style="margin-left:15%" id="myid2">
+
+	<h2>Corn Calculator</h2>
+	<h4>Choose Desired Time-->Click Submit-->Yellow Is Where The Sun Will Shine 
+
+  <!-- XDSoft DateTimePicker -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.min.css" integrity="sha256-DOS9W6NR+NFe1fUhEE0PGKY/fubbUCnOfTje2JMDw3Y=" crossorigin="anonymous" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.full.min.js" integrity="sha256-FEqEelWI3WouFOo2VWP/uJfs1y8KJ++FLh2Lbqc8SJk=" crossorigin="anonymous"></script>
+
+
+	<form action="" method="POST"> {% csrf_token %}
+		<input id="datetimepicker"  name="datetimepicker" type="text">
+		<input type="submit" value="Submit">
+	</form>
+	<div style='width:90%'><pre>Chosen DateTime(MST):<p>{{chosen_date}}</p></pre></div>
+
+<div id='map' style='width: 90%; height: 600px;'></div>
+  <script>
+  
+	var date_time_picker = $('#datetimepicker').datetimepicker({
+    	step: 30,
+    	inline: true,
+	});
+
+	date_time_picker.val('1969/6/9 04:20')
+
+	mapboxgl.accessToken = 'pk.eyJ1IjoibXVsaGVyaW5zdGVwaGVuIiwiYSI6ImNrbHYwc2t0MzBzdHQzMm1zZWZ3enIxMHIifQ.ka_Ar_Rb_9QSYf9MIa5heA';
+
+	var map = new mapboxgl.Map({
+	container: 'map',
+	style: 'mapbox://styles/mapbox/light-v10',
+	center: [-110.8, 43.75],
+	zoom: 11
+	});
+
+	map.addControl(
+	new MapboxGeocoder({
+	accessToken: mapboxgl.accessToken,
+	mapboxgl: mapboxgl
+	})
+	);
+ 
+	map.on('load', function () {
+	
+	map.addSource('dem', {
+	'type': 'raster-dem',
+	'url': 'mapbox://mapbox.terrain-rgb'
+	});
+
+	map.addLayer({
+	'id': 'hillshading',
+	'source': 'dem',
+	'color':'gray',
+	'type': 'hillshade',
+	"paint": {
+     	"hillshade-exaggeration": .8,
+	"hillshade-accent-color": "red",
+	"hillshade-highlight-color": "yellow",
+	"hillshade-illumination-anchor": "map",
+	"hillshade-illumination-direction": {{azimuth}},
+   	 }
+	});
+	
+	});
+	
+	map.addControl(new mapboxgl.NavigationControl());
+
+  </script>  	
+
+</div>
+
+
+<!-- Page Content -->
+<div style="margin-left:15%" id="myid1">
+	<h2>Map My Ski Tour</h2>
+	<h4>Map Your Track-->Press Enter-->Get Your Elevation Profile</h4>
+	<div id='map1' style='width:90%; height:450px;'></div>
+	<div style='width:90%;'><pre>
+Distance(miles):	<div id='calculated-area'></div>
+Vertical Gain(ft):	<div id='ele'></div>
+			<canvas id="line-chart"></canvas>
+	</pre></div>
+
+<script>
+	mapboxgl.accessToken = 'pk.eyJ1IjoibXVsaGVyaW5zdGVwaGVuIiwiYSI6ImNrbHYwc2t0MzBzdHQzMm1zZWZ3enIxMHIifQ.ka_Ar_Rb_9QSYf9MIa5heA';
+	var map1 = new mapboxgl.Map({
+	container: 'map1', 
+	style: 'mapbox://styles/mulherinstephen/ckm18z3ze2lm317nro9t8lqpi',
+	center: [-110.763999, 43.480623], 
+	zoom: 10 
+	});
+
+	map1.addControl(
+	new MapboxGeocoder({
+	accessToken: mapboxgl.accessToken,
+	mapboxgl: mapboxgl
+	})
+	);
+
+	map1.addControl(new mapboxgl.NavigationControl());
+
+	var draw = new MapboxDraw({
+	  displayControlsDefault: false,
+	  controls: {
+	    line_string: true,
+	    trash: true
+	  }
+	});
+	map1.addControl(draw);
+
+	map1.on('draw.create', updateArea);
+	map1.on('draw.delete', updateArea);
+	map1.on('draw.update', updateArea);
+
+	var final_length;
+	var x_axis;
+
+	function updateArea(e) {
+		x_axis=[0];
+		final_length=0;
+		ele=[];
+  		var data = draw.getAll();
+  		var answer = document.getElementById('calculated-area');
+  		var distance = Math.round(turf.length(data,{units: 'miles'})*100)/100;
+  		answer.innerHTML = distance
+  
+		var my_points=data.features[0].geometry.coordinates;
+  
+ 		for (i=0; i<my_points.length-1;i++){
+  			var from = turf.point(my_points[i]);
+    			var to = turf.point(my_points[i+1]);
+    			var options = {units: 'miles'};
+    			var distance = Math.round(turf.distance(from, to, options)*100)/100;
+			x_axis.push(x_axis[x_axis.length-1]+distance)
+  		}
+
+		document.getElementById('ele').innerHTML=0
+  		var points = turf.explode(data);
+  		final_length=points.features.length
+ 
+  		for (i = 0; i < points.features.length; i++) {
+    			var lng = points.features[i].geometry.coordinates[0]
+    			var lat = points.features[i].geometry.coordinates[1]
+      			getElevation(lng,lat);
+    		}
+		}
+
+	function getElevation(lng,lat){
+		
+  		var query = 'https://api.mapbox.com/v4/mapbox.mapbox-terrain-v2/tilequery/' + lng + ',' + lat + '.json?layers=contour&limit=50&access_token=pk.eyJ1IjoibXVsaGVyaW5zdGVwaGVuIiwiYSI6ImNrbHYwc2t0MzBzdHQzMm1zZWZ3enIxMHIifQ.ka_Ar_Rb_9QSYf9MIa5heA';
+  		$.ajax({
+    		method: 'GET',
+    		url: query,
+    		success: function(data) {
+  			get_high(data);
+      			return data;
+    		} 
+ 		});
+	}	
+
+	var ele = [];
+
+	function get_high(data) {
+		var allFeatures = data.features;
+  		var elevations = [];
+    		for (i = 0; i < allFeatures.length; i++) {
+     	 		elevations.push(allFeatures[i].properties.ele);
+   	 	}
+   	 	var highestElevation = Math.max(...elevations);
+    		ele.push(highestElevation*3.28084);
+      		if (ele.length == final_length) {
+      			final_answer=0;  
+  			for (i = 0; i < ele.length-1; i++) {
+    				if((ele[i+1] - ele[i]) > 0) {
+    					final_answer=final_answer+(ele[i+1] - ele[i])
+  				}
+       			}
+      		var ele_answer = document.getElementById('ele');
+		ele_answer.innerHTML = Math.round(final_answer)
+      		
+		var myLineChart = new Chart(document.getElementById("line-chart"), {
+    				type: 'line',
+				options: {
+					title: {
+  					    display: true,
+  					    text: 'Elevation Profile'
+  					  }
+  				},
+				data:{ 
+        				labels: x_axis,
+        				datasets: [{
+    						label: "Bitchin SkinTrack",
+    						data: ele,
+						lineTension: 0,
+  					}]
+				}
+		});
+		}
+	}	
+
+	</script>	
+
+</div>
+
+<style>
+.footer {
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  background-color: #f5f5f5;
+  color: #333;
+  text-align: center;
+}
+</style>
+
+<div class="footer">
+  <p>a Stephen Mulherin production</p>
+</div>
+
+
+</body>
+</html>
