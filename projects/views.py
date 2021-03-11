@@ -4,7 +4,6 @@ import matplotlib
 from matplotlib import colors
 from matplotlib.colors import ListedColormap
 import matplotlib.pyplot as plt
-import richdem as rd
 import os
 import earthpy.plot as ep
 import earthpy.spatial as es
