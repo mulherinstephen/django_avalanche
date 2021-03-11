@@ -28,7 +28,7 @@ def home_page(request):
         timezone = pytz.timezone('MST')
         chosen_date=chosen_date.astimezone(tz=timezone)
 
-    teton_dem = rd.LoadGDAL('Teton-30m-DEM.tif')
+    #teton_dem = rd.LoadGDAL('Teton-30m-DEM.tif')
     #aspect = rd.TerrainAttribute(teton_dem, attrib='aspect');
     #slope = rd.TerrainAttribute(teton_dem, attrib='slope_riserun');
 
@@ -37,7 +37,7 @@ def home_page(request):
     #np.save('slope.npy',slope)
 
     #aspect_array=np.load('aspect.npy')
-    elevation_array=np.load('elevation.npy')
+    #elevation_array=np.load('elevation.npy')
     #slope_array=np.load('slope.npy')
 
     #danger_graph(elevation_array)
